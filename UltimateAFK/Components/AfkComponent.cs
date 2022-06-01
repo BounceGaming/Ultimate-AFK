@@ -51,7 +51,10 @@ namespace UltimateAFK.Components
                 Plugin.Config.MinimumPlayers > Player.Dictionary.Count ||
                 (Plugin.Config.IgnoreTutorials && player.Role.Type == RoleType.Tutorial) ||
                 player.Role is Scp096Role { TryingNotToCry: true })
+            {
+                afkTime = 0;
                 return;
+            }
 
             PositionInfo currentPosition = new PositionInfo(player);
             if (currentPosition != lastPosition)
@@ -78,6 +81,7 @@ namespace UltimateAFK.Components
             if (Plugin.Config.TryReplace)
                 TryReplace();
 
+            player.ClearInventory();
             if (Plugin.Instance.Config.SpectateLimit > 0 && ++afkCounter > Plugin.Instance.Config.SpectateLimit)
             {
                 player.Disconnect(Plugin.Translation.KickReason);
