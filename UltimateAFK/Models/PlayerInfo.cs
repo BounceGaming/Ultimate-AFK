@@ -103,6 +103,7 @@ namespace UltimateAFK.Models
                     scp079Role.Level = level;
                     scp079Role.Experience = experience;
                     scp079Role.Energy = energy;
+                    scp079Role.MaxEnergy = scp079Role.Levels[level].maxMana;
                 }
             });
         }

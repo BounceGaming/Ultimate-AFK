@@ -9,6 +9,7 @@ namespace UltimateAFK.Models
 {
     using System;
     using Exiled.API.Features;
+    using Exiled.API.Features.Roles;
     using UnityEngine;
 
     /// <summary>
@@ -18,6 +19,7 @@ namespace UltimateAFK.Models
     {
         private readonly Vector3 position;
         private readonly Vector2 rotation;
+        private readonly float cameraRotation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PositionInfo"/> struct.
@@ -27,6 +29,7 @@ namespace UltimateAFK.Models
         {
             position = player.Position;
             rotation = player.Rotation;
+            cameraRotation = player.Role is Scp079Role scp079 ? scp079.Camera.Rotation : 0f;
         }
 
         /// <summary>
@@ -48,7 +51,9 @@ namespace UltimateAFK.Models
         /// <inheritdoc />
         public bool Equals(PositionInfo other)
         {
-            return position.Equals(other.position) && rotation.Equals(other.rotation);
+            return position.Equals(other.position) &&
+                   rotation.Equals(other.rotation) &&
+                   cameraRotation.Equals(other.cameraRotation);
         }
 
         /// <inheritdoc />
@@ -65,7 +70,10 @@ namespace UltimateAFK.Models
         {
             unchecked
             {
-                return (position.GetHashCode() * 397) ^ rotation.GetHashCode();
+                int hashCode = position.GetHashCode();
+                hashCode = (hashCode * 397) ^ rotation.GetHashCode();
+                hashCode = (hashCode * 397) ^ cameraRotation.GetHashCode();
+                return hashCode;
             }
         }
     }
