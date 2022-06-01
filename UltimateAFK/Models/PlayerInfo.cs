@@ -13,6 +13,7 @@ namespace UltimateAFK.Models
     using Exiled.API.Features.Roles;
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
+    using InventorySystem.Items.Usables.Scp330;
     using MEC;
     using MonoMod.Utils;
     using UnityEngine;
@@ -23,6 +24,7 @@ namespace UltimateAFK.Models
     public class PlayerInfo
     {
         private readonly List<ItemType> items = new();
+        private readonly List<CandyKindID> candies = new();
         private readonly List<CustomItem> customItems = new();
         private readonly RoleType role;
         private readonly Vector3 position;
@@ -49,6 +51,8 @@ namespace UltimateAFK.Models
             {
                 if (CustomItem.TryGet(item, out CustomItem customItem))
                     customItems.Add(customItem);
+                else if (item is Scp330 scp330)
+                    candies.AddRange(scp330.Candies);
                 else
                     items.Add(item.Type);
             }
@@ -79,8 +83,18 @@ namespace UltimateAFK.Models
                 player.Health = health;
                 player.Position = position;
                 player.ResetInventory(items);
+
                 foreach (CustomItem customItem in customItems)
                     customItem.Give(player);
+
+                if (candies.Count > 0)
+                {
+                    Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
+                    foreach (CandyKindID candy in candies)
+                        scp330.AddCandy(candy);
+
+                    scp330.Give(player);
+                }
 
                 player.Ammo.Clear();
                 player.Ammo.AddRange(ammo);
