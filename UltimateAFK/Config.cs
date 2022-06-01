@@ -1,32 +1,61 @@
-﻿namespace UltimateAFK
+﻿// -----------------------------------------------------------------------
+// <copyright file="Config.cs" company="Build">
+// Copyright (c) Build. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace UltimateAFK
 {
     using System.ComponentModel;
     using Exiled.API.Interfaces;
 
-    public sealed class Config : IConfig
+    /// <inheritdoc />
+    public class Config : IConfig
     {
-        [Description("Is the plugin enabled?")]
+        /// <inheritdoc />
         public bool IsEnabled { get; set; } = true;
-        [Description("Minimum required players for uAFK to be active.")]
-        public int MinPlayers { get; set; } = 2;
-        [Description("Do AFK players get replaced by spectators?")]
-        public bool TryReplace { get; private set; } = true;
-        [Description("Should Tutorials be ignored?")]
-        public bool IgnoreTut { get; private set; } = false;
-        [Description("How long can player not move?")]
-        public int AfkTime { get; private set; } = 30;
-        [Description("How long to wait before player gets kicked after getting a warning for not moving?")]
-        public int GraceTime { get; private set; } = 15;
-        [Description("After how many changes to spectator for AFK should player get kicked?")]
-        public int NumBeforeKick { get; private set; } = 2;
-        [Description("Maximum replace time, if the round time is past this value it will not replace the player (Set to -1 to disable)")]
-        public int MaxReplaceTime { get; private set; } = -1;
-        [Description("Don't touch this if you do not understand the repercussions! - Ignore Perm and IP Checks.")]
-        public bool IgnorePermissionsAndIP { get; private set; } = false;
-        public string MsgPrefix { get; private set; } = "<color=white>[</color><color=green>uAFK</color><color=white>]</color>";
-        public string MsgGrace { get; private set; } = "<color=red>You will be moved to spectator in</color> <color=white>%timeleft% seconds</color><color=red> if you do not move!</color>";
-        public string MsgFspec { get; private set; } = "You were detected as AFK and automatically moved to spectator!";
-        public string MsgKick { get; private set; } = "[Kicked by uAFK] You were AFK for too long!";
-        public string MsgReplace { get; private set; } = "You have replaced a player that was AFK.";
+
+        /// <summary>
+        /// Gets or sets a value indicating whether debug logs are enabled.
+        /// </summary>
+        [Description("Whether debug logs are enabled.")]
+        public bool Debug { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the minimum amount of players that should be on the server to run the afk check.
+        /// </summary>
+        [Description("The minimum amount of players that should be on the server to run the afk check.")]
+        public int MinimumPlayers { get; set; } = 2;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether tutorials will be ignored from afk checks.
+        /// </summary>
+        [Description("Whether tutorials will be ignored from afk checks.")]
+        public bool IgnoreTutorials { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the amount of time, in seconds, that a player will receive a warning that they have hit the maximum afk time.
+        /// </summary>
+        [Description("The amount of time, in seconds, that a player will receive a warning that they have hit the maximum afk time.")]
+        public int GraceTime { get; set; } = 15;
+
+        /// <summary>
+        /// Gets or sets the amount of time, in seconds, before a player will be detected as afk.
+        /// </summary>
+        [Description("The amount of time, in seconds, before a player will be detected as afk.")]
+        public int AfkTime { get; set; } = 45;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player should be replaced by another spectator.
+        /// </summary>
+        [Description("Whether the player should be replaced by another spectator.")]
+        public bool TryReplace { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the amount of times a player will be forced to spectate before they are kicked.
+        /// </summary>
+        [Description("The amount of times a player will be forced to spectate before they are kicked.")]
+        public int SpectateLimit { get; set; } = 2;
     }
 }
