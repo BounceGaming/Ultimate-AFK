@@ -27,8 +27,6 @@ namespace UltimateAFK.Components
         private int afkTime;
         private int afkCounter;
 
-        private static Plugin Plugin => Plugin.Instance;
-
         private void Awake()
         {
             player = Player.Get(gameObject);
@@ -48,8 +46,8 @@ namespace UltimateAFK.Components
         {
             if (player.CheckPermission("uafk.ignore") ||
                 player.IsDead ||
-                Plugin.Config.MinimumPlayers > Player.Dictionary.Count ||
-                (Plugin.Config.IgnoreTutorials && player.Role.Type == RoleType.Tutorial) ||
+                Plugin.Instance.Config.MinimumPlayers > Player.Dictionary.Count ||
+                (Plugin.Instance.Config.IgnoreTutorials && player.Role.Type == RoleType.Tutorial) ||
                 player.Role is Scp096Role { TryingNotToCry: true })
             {
                 afkTime = 0;
@@ -65,26 +63,26 @@ namespace UltimateAFK.Components
             }
 
             afkTime++;
-            if (afkTime < Plugin.Config.AfkTime)
+            if (afkTime < Plugin.Instance.Config.AfkTime)
                 return;
 
-            int gracePeriodRemaining = Plugin.Config.GraceTime + Plugin.Config.AfkTime - afkTime;
+            int gracePeriodRemaining = Plugin.Instance.Config.GraceTime + Plugin.Instance.Config.AfkTime - afkTime;
             if (gracePeriodRemaining > 0)
             {
-                player.Broadcast(1, string.Format(Plugin.Translation.GracePeriodWarning, gracePeriodRemaining).Replace("$seconds", gracePeriodRemaining == 1 ? "second" : "seconds"), shouldClearPrevious: true);
+                player.Broadcast(1, string.Format(Plugin.Instance.Translation.GracePeriodWarning, gracePeriodRemaining).Replace("$seconds", gracePeriodRemaining == 1 ? "second" : "seconds"), shouldClearPrevious: true);
                 return;
             }
 
-            Log.Debug($"{player} has been detected as AFK.", Plugin.Config.Debug);
+            Log.Debug($"{player} has been detected as AFK.", Plugin.Instance.Config.Debug);
             afkTime = 0;
 
-            if (Plugin.Config.TryReplace)
+            if (Plugin.Instance.Config.TryReplace)
                 TryReplace();
 
             player.ClearInventory();
             if (Plugin.Instance.Config.SpectateLimit > 0 && ++afkCounter > Plugin.Instance.Config.SpectateLimit)
             {
-                player.Disconnect(Plugin.Translation.KickReason);
+                player.Disconnect(Plugin.Instance.Translation.KickReason);
                 return;
             }
 
@@ -93,7 +91,7 @@ namespace UltimateAFK.Components
 
         private void TryReplace()
         {
-            Player toSwap = Player.List.FirstOrDefault(ply => ply.IsDead && !ply.IsOverwatchEnabled && ply != player);
+            Player toSwap = Player.List.FirstOrDefault(toSwap => toSwap.IsDead && !toSwap.IsOverwatchEnabled && toSwap != player);
             if (toSwap is not null)
                 new PlayerInfo(player).AddTo(toSwap);
         }
@@ -101,7 +99,7 @@ namespace UltimateAFK.Components
         private void ForceSpectator()
         {
             player.Role.Type = RoleType.Spectator;
-            player.Broadcast(Plugin.Translation.SpectatorForced);
+            player.Broadcast(Plugin.Instance.Translation.SpectatorForced);
         }
     }
 }
