@@ -72,13 +72,16 @@ namespace UltimateAFK.Models
         public void AddTo(Player player)
         {
             player.Role.Type = role;
-            if (customRoles is not null)
+
+            bool isCustom = customRoles is not null;
+            if (isCustom)
             {
                 foreach (CustomRole customRole in customRoles)
                     customRole.AddRole(player);
             }
 
-            Timing.CallDelayed(0.3f, () =>
+            float delay = isCustom ? 2f : 0.5f;
+            Timing.CallDelayed(delay, () =>
             {
                 player.Health = health;
                 player.Position = position;
