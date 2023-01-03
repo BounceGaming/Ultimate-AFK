@@ -7,7 +7,7 @@
 
 namespace UltimateAFK
 {
-    using Exiled.Events.EventArgs;
+    using Exiled.Events.EventArgs.Player;
     using UltimateAFK.Components;
 
     /// <summary>

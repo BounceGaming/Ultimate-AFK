@@ -29,7 +29,7 @@ namespace UltimateAFK.Models
         {
             position = player.Position;
             rotation = player.Rotation;
-            cameraRotation = player.Role is Scp079Role scp079 ? scp079.Camera.Rotation : 0f;
+            cameraRotation = player.Role is Scp079Role scp079 ? scp079.Camera.Rotation.x : 0f;
         }
 
         /// <summary>

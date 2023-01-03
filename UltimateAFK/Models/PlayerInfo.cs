@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using PlayerRoles;
+
 namespace UltimateAFK.Models
 {
     using System.Collections.Generic;
@@ -26,13 +28,13 @@ namespace UltimateAFK.Models
         private readonly List<ItemType> items = new();
         private readonly List<CandyKindID> candies = new();
         private readonly List<CustomItem> customItems = new();
-        private readonly RoleType role;
+        private readonly RoleTypeId role;
         private readonly Vector3 position;
         private readonly float health;
         private readonly IReadOnlyCollection<CustomRole> customRoles;
         private readonly Dictionary<ItemType, ushort> ammo;
-        private readonly byte level;
-        private readonly float experience;
+        private readonly int level;
+        private readonly int experience;
         private readonly float energy;
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace UltimateAFK.Models
         /// <param name="player">The player to add the properties to.</param>
         public void AddTo(Player player)
         {
-            player.Role.Type = role;
+            player.Role.Set(role);
 
             bool isCustom = customRoles is not null;
             if (isCustom)
@@ -106,7 +108,7 @@ namespace UltimateAFK.Models
                     scp079Role.Level = level;
                     scp079Role.Experience = experience;
                     scp079Role.Energy = energy;
-                    scp079Role.MaxEnergy = scp079Role.Levels[level].maxMana;
+                    scp079Role.MaxEnergy = scp079Role.MaxEnergy;
                 }
             });
         }

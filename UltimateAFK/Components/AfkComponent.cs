@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using PlayerRoles;
+
 namespace UltimateAFK.Components
 {
     using System.Linq;
@@ -47,7 +49,7 @@ namespace UltimateAFK.Components
             if (player.CheckPermission("uafk.ignore") ||
                 player.IsDead ||
                 Plugin.Instance.Config.MinimumPlayers > Player.Dictionary.Count ||
-                (Plugin.Instance.Config.IgnoreTutorials && player.Role.Type == RoleType.Tutorial) ||
+                (Plugin.Instance.Config.IgnoreTutorials && player.Role.Type == RoleTypeId.Tutorial) ||
                 player.Role is Scp096Role { TryingNotToCry: true })
             {
                 afkTime = 0;
@@ -73,7 +75,7 @@ namespace UltimateAFK.Components
                 return;
             }
 
-            Log.Debug($"{player} has been detected as AFK.", Plugin.Instance.Config.Debug);
+            Log.Debug($"{player} has been detected as AFK.");
             afkTime = 0;
 
             if (Plugin.Instance.Config.TryReplace)
@@ -98,7 +100,7 @@ namespace UltimateAFK.Components
 
         private void ForceSpectator()
         {
-            player.Role.Type = RoleType.Spectator;
+            player.Role.Set(RoleTypeId.Spectator);
             player.Broadcast(Plugin.Instance.Translation.SpectatorForced);
         }
     }
