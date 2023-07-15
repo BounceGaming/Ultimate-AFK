@@ -50,7 +50,7 @@ namespace UltimateAFK.Components
                 player.IsDead ||
                 Plugin.Instance.Config.MinimumPlayers > Player.Dictionary.Count ||
                 (Plugin.Instance.Config.IgnoreTutorials && player.Role.Type == RoleTypeId.Tutorial) ||
-                player.Role is Scp096Role { TryingNotToCry: true })
+                player.Role is Scp096Role { TryNotToCryActive: true })
             {
                 afkTime = 0;
                 return;
